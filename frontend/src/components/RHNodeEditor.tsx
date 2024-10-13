@@ -16,6 +16,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
 import { RHNodeData } from "../types/data";
 import { truncateString } from "../util";
+import { ChatLog } from "./ChatLog";
+import ChatBar from "./ChatBar";
 
 type RHNodeEditorProps = {
   rootData: RHNodeData;
@@ -53,18 +55,27 @@ export default function RHNodeEditor({
 
   const handleApiCall = async () => {
     setLoading(true);
-    const response = await fetch("http://localhost:8000/inference?query=" + encodeURIComponent(prompt));
-    if (!response.ok) {
-      throw new Error("Bad response " + response);
-    }
-    const json = await response.json();
+    // const response = await fetch("http://localhost:8000/inference?query=" + encodeURIComponent(prompt));
+    // if (!response.ok) {
+    //   throw new Error("Bad response " + response);
+    // }
+    // const json = await response.json();
     setLoading(false);
-    setResponse(json.result);
+    // setResponse(json.result);
+    setResponse("le poo poo");
   };
 
   return (
     <>
-      <Dialog open={isOpen} onClose={handleClose}>
+      <Dialog
+        open={isOpen}
+        onClose={handleClose}
+        sx={{
+          "& .MuiDialog-paper": {
+            minWidth: "35vw",
+          },
+        }}
+      >
         <DialogTitle>
           <IconButton
             aria-label="close"
@@ -88,7 +99,7 @@ export default function RHNodeEditor({
                 alignItems: "center", // Center items vertically
                 overflowX: "auto", // Enable horizontal scrolling
                 whiteSpace: "nowrap", // Prevent text wrapping
-                padding: "0 1rem 1rem 0" // top right bottom left
+                padding: "0 1rem 1rem 0", // top right bottom left
               }}
             >
               <Typography variant="body1">Parent query:</Typography>
@@ -120,26 +131,24 @@ export default function RHNodeEditor({
               </Box>
             </Box>
           )}
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginBottom: "0.5rem",
+            }}
+          >
             <>
               <TextField
                 label="Query description"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                // onKeyDown={(e) => {
-                //   if (e.key == "Enter") {
-                //     setIsEditingName(false);
-                //   }
-                // }}
                 fullWidth
                 margin="normal"
               />
-              {/* <IconButton onClick={() => setIsEditingName(false)}>
-                  <CheckIcon />
-                </IconButton> */}
             </>
           </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          {/* <div style={{ display: "flex", alignItems: "center" }}>
             {isEditingPrompt ? (
               <>
                 <TextField
@@ -166,10 +175,26 @@ export default function RHNodeEditor({
                 </IconButton>
               </>
             )}
-          </div>
-          {loading ? <CircularProgress /> : <Typography variant="body1" marginTop={2}>
-            Response: {response}
-          </Typography>}
+          </div> */}
+
+          <ChatLog
+            prompts={rhNodeData.prompts}
+            responses={
+              rhNodeData.prompts.length > 0
+                ? rhNodeData.responses
+                : ["Ask a question to get started!"]
+            }
+          />
+
+          <ChatBar onSend={() => {}} disabled={false} />
+
+          {/* {loading ? (
+            <CircularProgress />
+          ) : (
+            <Typography variant="body1" marginTop={2}>
+              Response: {response}
+            </Typography>
+          )} */}
           {rhNodeData.children!.length > 0 && (
             <Box
               sx={{
@@ -177,10 +202,12 @@ export default function RHNodeEditor({
                 alignItems: "center",
                 overflowX: "auto", // Enable horizontal scrolling
                 whiteSpace: "nowrap", // Prevent text wrapping
-                padding: "1rem 1rem 1rem 0" // top right bottom left
+                padding: "1rem 1rem 1rem 0", // top right bottom left
               }}
             >
-              <Typography variant="body1" sx={{marginRight: "1rem"}}>Subqueries:</Typography>
+              <Typography variant="body1" sx={{ marginRight: "1rem" }}>
+                Subqueries:
+              </Typography>
               {rhNodeData.children!.map((child, idx) => (
                 <Box
                   key={idx}
@@ -214,14 +241,14 @@ export default function RHNodeEditor({
             </Box>
           )}
         </DialogContent>
-        <DialogActions>
+        {/* <DialogActions>
           <Button onClick={handleApiCall} color="primary">
             Generate Response
           </Button>
           <Button onClick={handleClose} color="secondary">
             Close
           </Button>
-        </DialogActions>
+        </DialogActions> */}
       </Dialog>
     </>
   );

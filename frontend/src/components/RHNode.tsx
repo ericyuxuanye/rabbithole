@@ -83,6 +83,8 @@ export default function RHNode({
                     uuid: v4(),
                     prompt: "Enter prompt",
                     response: "",
+                    prompts: [],
+                    responses: [],
                     children: [],
                   };
                   addNode(rootData, uuid, newNode);

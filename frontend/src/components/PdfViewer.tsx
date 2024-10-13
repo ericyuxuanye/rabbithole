@@ -60,6 +60,8 @@ export default function PdfViewer({
                   uuid: v4(),
                   prompt: "Enter prompt",
                   response: "",
+                  prompts: [],
+                  responses: [],
                   children: [],
                 }) - 1;
               setTrees(newTrees);
