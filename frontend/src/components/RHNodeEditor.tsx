@@ -1,6 +1,7 @@
 import CloseIcon from "@mui/icons-material/Close";
 import {
   Box,
+  Button,
   Dialog,
   DialogContent,
   DialogTitle,
@@ -10,9 +11,10 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { RHNodeData } from "../types/data";
-import { truncateString } from "../util";
+import { addNode, truncateString } from "../util";
 import ChatBar from "./ChatBar";
 import { ChatLog } from "./ChatLog";
+import { v4 } from "uuid";
 
 type RHNodeEditorProps = {
   rootData: RHNodeData;
@@ -59,13 +61,13 @@ export default function RHNodeEditor({
 
   const handleApiCall = async (prompts: string[], responses: string[]) => {
     setLoading(true);
-    
+
     const response = await fetch("http://localhost:8000/inference", {
       method: 'POST', // Specify the request method
       headers: {
         'Content-Type': 'application/json' // Set the content type to JSON
       },
-      body: JSON.stringify({user: prompts, assistant: responses}) // Convert the data to a JSON string
+      body: JSON.stringify({ user: prompts, assistant: responses }) // Convert the data to a JSON string
     });
     if (!response.ok) {
       throw new Error("Bad response " + response);
@@ -225,49 +227,86 @@ export default function RHNodeEditor({
               Response: {response}
             </Typography>
           )} */}
-          {rhNodeData.children!.length > 0 && (
+          {(
             <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
                 overflowX: "auto", // Enable horizontal scrolling
                 whiteSpace: "nowrap", // Prevent text wrapping
-                padding: "1rem 1rem 1rem 0", // top right bottom left
+                padding: "1rem 0 1rem 0", // top right bottom left
               }}
             >
-              <Typography variant="body1" sx={{ marginRight: "1rem" }}>
-                Subqueries:
-              </Typography>
-              {rhNodeData.children!.map((child, idx) => (
-                <Box
-                  key={idx}
+              {
+                rhNodeData.children!.length > 0 ? <Box
                   sx={{
-                    borderRadius: "8px", // Rounded corners
-                    backgroundColor: "background.paper", // Background color
-                    padding: "0.5rem 1rem", // Padding inside the box
-                    marginRight: "1rem", // Space between boxes
-                    boxShadow: 2, // Shadow for elevation
-                    "&:last-child": {
-                      marginRight: 0, // Remove margin for the last item
-                    },
+                    flexGrow: "1",
+                    display: "flex",
+                    alignItems: "center",
+                    overflowX: "auto", // Enable horizontal scrolling
+                    whiteSpace: "nowrap", // Prevent text wrapping
+                    padding: "1rem 0 1rem 0", // top right bottom left
                   }}
                 >
-                  <Typography
-                    variant="body1"
-                    component="span"
-                    onClick={() => setFocusedUuid(child.uuid!)}
-                    sx={{
-                      color: "primary.main", // MUI primary color
-                      cursor: "pointer", // Change cursor to pointer to indicate it's clickable
-                      "&:hover": {
-                        textDecoration: "underline", // Ensure underline on hover
-                      },
-                    }}
-                  >
-                    {`${truncateString(child.name, 10)}`}
+                  <Typography variant="body1" sx={{ marginRight: "1rem" }}>
+                    Subqueries:
                   </Typography>
+                  {rhNodeData.children!.map((child, idx) => (
+                    <Box
+                      key={idx}
+                      sx={{
+                        borderRadius: "8px", // Rounded corners
+                        backgroundColor: "background.paper", // Background color
+                        padding: "0.5rem 1rem", // Padding inside the box
+                        marginRight: "1rem", // Space between boxes
+                        boxShadow: 2, // Shadow for elevation
+                        "&:last-child": {
+                          marginRight: 0, // Remove margin for the last item
+                        },
+                      }}
+                    >
+                      <Typography
+                        variant="body1"
+                        component="span"
+                        onClick={() => setFocusedUuid(child.uuid!)}
+                        sx={{
+                          color: "primary.main", // MUI primary color
+                          cursor: "pointer", // Change cursor to pointer to indicate it's clickable
+                          "&:hover": {
+                            textDecoration: "underline", // Ensure underline on hover
+                          },
+                        }}
+                      >
+                        {`${truncateString(child.name, 10)}`}
+                      </Typography>
+                    </Box>
+                  ))}
                 </Box>
-              ))}
+                  : <div style={{ flexGrow: 1 }}></div>
+              }
+              <Box sx={{ display: "flex", flexDirection: "column", alignItems: "end" }}>
+                <Button variant="outlined" color="error" sx={{ paddingLeft: "0.5rem", paddingRight: "0.5rem", marginLeft: "0.5rem" }} onClick={() => {
+                  const uuid: string = rhNodeData.uuid;
+                  const newNode: RHNodeData = {
+                    name: "Subquery",
+                    parentName: rhNodeData.name,
+                    parentUuid: rhNodeData.uuid,
+                    uuid: v4(),
+                    prompt: "Enter prompt",
+                    response: "",
+                    prompts: [],
+                    responses: [],
+                    children: [],
+                  };
+                  addNode(rootData, uuid, newNode);
+                  const newData = { ...rootData };
+                  setRootData(newData);
+                  handleClose();
+                  setFocusedUuid(newNode.uuid);
+                }}>
+                  Add subquery
+                </Button>
+              </Box>
             </Box>
           )}
         </DialogContent>
