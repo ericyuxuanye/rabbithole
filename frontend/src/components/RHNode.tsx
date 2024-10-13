@@ -22,7 +22,11 @@ export default function RHNode({
   rootData,
   setRootData,
 }: RHNodeProps) {
-  const [isEditing, setIsEditing] = useState(false);
+  // should show up upon initial node creation but not otherwise
+  const [isEditing, setIsEditing] = useState(
+    // @ts-expect-error parentName exists if not at root
+    nodeDatum.children?.length === 0 && nodeDatum.parentName === undefined
+  );
 
   const r = 15;
 
@@ -73,17 +77,17 @@ export default function RHNode({
                 alignItems: "center",
               }}
             >
-              <button onClick={() => setIsEditing(true)}>Edit node</button>
+              <button onClick={() => setIsEditing(true)}>View query details</button>
               <button
                 onClick={() => {
                   // @ts-expect-error uuid will exist
                   const uuid: string = nodeDatum.uuid;
                   const newNode: RHNodeData = {
-                    name: "new child",
+                    name: "Subquery",
                     parentName: nodeDatum.name,
                     uuid: v4(),
-                    prompt: "hi",
-                    response: "hi",
+                    prompt: "Enter prompt",
+                    response: "",
                     children: [],
                   };
                   addNode(rootData, uuid, newNode);
@@ -91,12 +95,12 @@ export default function RHNode({
                   setRootData(newData);
                 }}
               >
-                Add child
+                Add subquery
               </button>
             </div>
             {nodeDatum.children!.length > 0 ? (
               <button style={{ width: "100%" }} onClick={toggleNode}>
-                {nodeDatum.__rd3t.collapsed ? "Expand" : "Collapse"}
+                {nodeDatum.__rd3t.collapsed ? "See subqueries" : "Hide subqueries"}
               </button>
             ) : null}
           </div>
