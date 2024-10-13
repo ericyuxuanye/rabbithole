@@ -16,3 +16,7 @@ export const addNode = (node: RHNodeData, uuid: string, newNode: RHNodeData) => 
     parentNode.children!.push(newNode);
   }
 };
+
+export const truncateString = (str: string, len: number) => {
+  return str.length <= len ? str : `${str.slice(0, len - 3)}...`
+}

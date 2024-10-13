@@ -4,6 +4,7 @@ export interface RHNodeData extends RawNodeDatum {
   name: string;
   parentName?: string;
   uuid: string;
+  parentUuid?: string;
   prompt: string;
   response: string;
   children?: RHNodeData[];

@@ -18,6 +18,7 @@ interface PdfViewerProps {
   trees: RHNodeData[];
   setTrees: (trees: RHNodeData[]) => void;
   setTreeIdx: (treeIdx: number) => void;
+  setFocusedUuid: (focusedUuid: string) => void;
 }
 
 export default function PdfViewer({
@@ -25,6 +26,7 @@ export default function PdfViewer({
   trees,
   setTrees,
   setTreeIdx,
+  setFocusedUuid,
 }: PdfViewerProps) {
   const renderHighlightTarget = (props: RenderHighlightTargetProps) => (
     <div
@@ -62,9 +64,12 @@ export default function PdfViewer({
                 }) - 1;
               setTrees(newTrees);
               setTreeIdx(treeIdx);
+              setFocusedUuid(newTrees[newTrees.length - 1].uuid);
             }}
           >
-            <SearchIcon />
+            <div style={{ marginTop: "0.25rem" }}>
+              <SearchIcon />
+            </div>
           </Button>
         }
         content={() => <div style={{ width: "100px" }}>Ask about this!</div>}

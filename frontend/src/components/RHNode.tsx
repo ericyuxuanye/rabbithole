@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { TreeNodeDatum } from "react-d3-tree";
-import { RHNodeData } from "../types/data";
 import { v4 } from "uuid";
+import { RHNodeData } from "../types/data";
+import { addNode, findNode, truncateString } from "../util";
 import RHNodeEditor from "./RHNodeEditor";
-import { addNode, findNode } from "../util";
 
 type RHNodeProps = {
   nodeDatum: TreeNodeDatum;
@@ -12,6 +11,8 @@ type RHNodeProps = {
   nodeHeight: number;
   rootData: RHNodeData;
   setRootData: (newData: RHNodeData) => void;
+  focusedUuid: string;
+  setFocusedUuid: (focusedUuid: string) => void;
 };
 
 export default function RHNode({
@@ -21,17 +22,15 @@ export default function RHNode({
   nodeHeight,
   rootData,
   setRootData,
+  focusedUuid,
+  setFocusedUuid,
 }: RHNodeProps) {
-  // should show up upon initial node creation but not otherwise
-  const [isEditing, setIsEditing] = useState(
-    // @ts-expect-error parentName exists if not at root
-    nodeDatum.children?.length === 0 && nodeDatum.parentName === undefined
-  );
-
   const r = 15;
 
   // @ts-expect-error uuid will exist
   const nodeData = findNode(rootData, nodeDatum.uuid);
+
+  const handleClose = () => setFocusedUuid("");
 
   return (
     nodeData && (
@@ -47,11 +46,10 @@ export default function RHNode({
           <RHNodeEditor
             rootData={rootData}
             setRootData={setRootData}
-            isOpen={isEditing}
+            isOpen={focusedUuid === nodeData.uuid}
             rhNodeData={nodeData}
-            onClose={() => {
-              setIsEditing(false);
-            }}
+            onClose={handleClose}
+            setFocusedUuid={setFocusedUuid}
           />
           <div
             style={{
@@ -62,14 +60,8 @@ export default function RHNode({
             }}
           >
             <h3 style={{ textAlign: "center" }}>
-              {nodeDatum.name.length < 20
-                ? nodeDatum.name
-                : `${nodeDatum.name.slice(0, 17)}...`}
+              {truncateString(nodeDatum.name, 20)}
             </h3>
-            {/* probably move prompt and repsonse to a widget later */}
-            {/* <p style={{ textAlign: "center" }}>Prompt: {nodeDatum.prompt}</p> */}
-            {/* <p style={{ textAlign: "center" }}>Response: {nodeDatum.response}</p> */}
-            {/* test */}
             <div
               style={{
                 display: "flex",
@@ -77,14 +69,17 @@ export default function RHNode({
                 alignItems: "center",
               }}
             >
-              <button onClick={() => setIsEditing(true)}>View query details</button>
+              <button onClick={() => setFocusedUuid(nodeData.uuid)}>
+                View query details
+              </button>
               <button
                 onClick={() => {
                   // @ts-expect-error uuid will exist
                   const uuid: string = nodeDatum.uuid;
                   const newNode: RHNodeData = {
                     name: "Subquery",
-                    parentName: nodeDatum.name,
+                    parentName: nodeData.name,
+                    parentUuid: nodeData.uuid,
                     uuid: v4(),
                     prompt: "Enter prompt",
                     response: "",
@@ -100,7 +95,9 @@ export default function RHNode({
             </div>
             {nodeDatum.children!.length > 0 ? (
               <button style={{ width: "100%" }} onClick={toggleNode}>
-                {nodeDatum.__rd3t.collapsed ? "See subqueries" : "Hide subqueries"}
+                {nodeDatum.__rd3t.collapsed
+                  ? "See subqueries"
+                  : "Hide subqueries"}
               </button>
             ) : null}
           </div>
