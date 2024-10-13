@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
-import CheckIcon from '@mui/icons-material/Check';
+import CheckIcon from "@mui/icons-material/Check";
 import { RHNodeData } from "../types/data";
 
 type RHNodeEditorProps = {
@@ -33,7 +33,7 @@ export default function RHNodeEditor({
   const [prompt, setPrompt] = useState(rhNodeData.prompt || "");
   const [response, setResponse] = useState(rhNodeData.response || "");
 
-  const [isEditingName, setIsEditingName] = useState(true);
+  // const [isEditingName, setIsEditingName] = useState(true);
   const [isEditingPrompt, setIsEditingPrompt] = useState(true);
 
   const handleClose = () => {
@@ -65,37 +65,28 @@ export default function RHNodeEditor({
         </DialogTitle>
         <DialogContent>
           {rhNodeData.parentName && (
-            <Typography variant="h6">
-              {`[↑ previous topic ${rhNodeData.parentName}]`}
+            <Typography>
+              {`[↑ previous topic: ${rhNodeData.parentName}]`}
             </Typography>
           )}
           <div style={{ display: "flex", alignItems: "center" }}>
-            {isEditingName ? (
-              <>
-                <TextField
-                  label="Title"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key == "Enter") {
-                      setIsEditingName(false);
-                    }
-                  }}
-                  fullWidth
-                  margin="normal"
-                />
-                <IconButton onClick={() => setIsEditingName(false)}>
+            <>
+              <TextField
+                label="Query description"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                // onKeyDown={(e) => {
+                //   if (e.key == "Enter") {
+                //     setIsEditingName(false);
+                //   }
+                // }}
+                fullWidth
+                margin="normal"
+              />
+              {/* <IconButton onClick={() => setIsEditingName(false)}>
                   <CheckIcon />
-                </IconButton>
-              </>
-            ) : (
-              <>
-                <Typography variant="h6">Title: {name}</Typography>
-                <IconButton onClick={() => setIsEditingName(true)}>
-                  <EditIcon />
-                </IconButton>
-              </>
-            )}
+                </IconButton> */}
+            </>
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
             {isEditingPrompt ? (

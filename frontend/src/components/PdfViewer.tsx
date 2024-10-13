@@ -1,14 +1,13 @@
+import SearchIcon from "@mui/icons-material/Search";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import "@react-pdf-viewer/highlight/lib/styles/index.css";
-import SearchIcon from '@mui/icons-material/Search';
 
 import { Button, Position, Tooltip } from "@react-pdf-viewer/core";
 import {
   highlightPlugin,
-  MessageIcon,
   RenderHighlightTargetProps,
 } from "@react-pdf-viewer/highlight";
 import { v4 } from "uuid";
@@ -48,9 +47,14 @@ export default function PdfViewer({
             onClick={() => {
               // figure out how to get selected text
               const newTrees = [...trees];
+              const selectedString = window.getSelection()?.toString();
               const treeIdx =
                 newTrees.push({
-                  name: "highlighted text",
+                  name: `${
+                    selectedString!.length > 0
+                      ? selectedString
+                      : "Query description"
+                  }`,
                   uuid: v4(),
                   prompt: "Enter prompt",
                   response: "",
