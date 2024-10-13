@@ -1,31 +1,16 @@
 import { useState } from "react";
 import "./App.css";
 import RHTree from "./components/RHTree";
-import { RHNodeData } from "./components/RHTree";
 import { v4 as uuidv4 } from 'uuid';
+import RHNodeEditor from "./components/RHNodeEditor";
 
 
-const treeData: RHNodeData = {
-  name: "1",
+const treeData = {
+  name: "root",
   uuid: uuidv4(),
   prompt: "hi",
   response: "hi",
-  children: [
-    {
-      name: "2",
-      uuid: uuidv4(),
-      prompt: "hi",
-      response: "hi",
-      children: [],
-    },
-    {
-      name: "3",
-      uuid: uuidv4(),
-      prompt: "hi",
-      response: "hi",
-      children: [],
-    },
-  ],
+  children: []
 };
 
 function App() {
@@ -34,6 +19,7 @@ function App() {
   return (
     <>
       <RHTree data={data} setData={setData} />
+      {/* <RHNodeEditor rhNodeData={data} /> */}
     </>
   );
 }
