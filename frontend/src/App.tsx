@@ -1,10 +1,12 @@
+import { Button } from "@mui/material";
 import { useState } from "react";
-import "./App.css";
-import RHTree from "./components/RHTree";
 import { v4 as uuidv4 } from "uuid";
-import PdfViewer from "./components/PdfViewer";
-import { RHNodeData } from "./types/data";
+import "./App.css";
 import Navbar from "./components/Navbar";
+import PdfViewer from "./components/PdfViewer";
+import RHTree from "./components/RHTree";
+import { RHNodeData } from "./types/data";
+import CloseIcon from "@mui/icons-material/Close";
 
 const treeData = {
   name: "root",
@@ -51,6 +53,25 @@ function App() {
             overflow: "hidden",
           }}
         >
+          <Button
+            variant="contained"
+            color="error" // Use MUI's predefined red color
+            style={{
+              position: "absolute",
+              top: "16px",
+              right: "16px",
+              zIndex: "20", // Ensure button is above overlay
+              minWidth: "40px", // Set minimum width to make it round
+              minHeight: "40px", // Set minimum height to make it round
+              borderRadius: "50%", // Make the button round
+              padding: "8px", // Add padding for icon size
+            }}
+            onClick={() => {
+              setTreeIdx(-1);
+            }}
+          >
+            <CloseIcon />
+          </Button>
           <RHTree
             data={trees[treeIdx]}
             setData={(value: RHNodeData) => {
