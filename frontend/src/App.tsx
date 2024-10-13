@@ -1,20 +1,11 @@
+import CloseIcon from "@mui/icons-material/Close";
 import { Button } from "@mui/material";
 import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import PdfViewer from "./components/PdfViewer";
 import RHTree from "./components/RHTree";
 import { RHNodeData } from "./types/data";
-import CloseIcon from "@mui/icons-material/Close";
-
-const treeData = {
-  name: "root",
-  uuid: uuidv4(),
-  prompt: "hi",
-  response: "hi",
-  children: [],
-};
 
 function App() {
   const [trees, setTrees] = useState<RHNodeData[]>([]);

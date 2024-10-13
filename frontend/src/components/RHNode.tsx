@@ -1,7 +1,7 @@
 import { TreeNodeDatum } from "react-d3-tree";
 import { v4 } from "uuid";
 import { RHNodeData } from "../types/data";
-import { addNode, findNode } from "../util";
+import { addNode, findNode, truncateString } from "../util";
 import RHNodeEditor from "./RHNodeEditor";
 
 type RHNodeProps = {
@@ -49,6 +49,7 @@ export default function RHNode({
             isOpen={focusedUuid === nodeData.uuid}
             rhNodeData={nodeData}
             onClose={handleClose}
+            setFocusedUuid={setFocusedUuid}
           />
           <div
             style={{
@@ -59,9 +60,7 @@ export default function RHNode({
             }}
           >
             <h3 style={{ textAlign: "center" }}>
-              {nodeDatum.name.length < 20
-                ? nodeDatum.name
-                : `${nodeDatum.name.slice(0, 17)}...`}
+              {truncateString(nodeDatum.name, 20)}
             </h3>
             <div
               style={{
@@ -79,7 +78,8 @@ export default function RHNode({
                   const uuid: string = nodeDatum.uuid;
                   const newNode: RHNodeData = {
                     name: "Subquery",
-                    parentName: nodeDatum.name,
+                    parentName: nodeData.name,
+                    parentUuid: nodeData.uuid,
                     uuid: v4(),
                     prompt: "Enter prompt",
                     response: "",
