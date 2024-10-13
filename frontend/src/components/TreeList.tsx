@@ -1,4 +1,4 @@
-import { IconButton, Menu, MenuItem, Tooltip } from "@mui/material";
+import { IconButton, Menu, MenuItem, Tooltip, Typography } from "@mui/material";
 import { RHNodeData } from "../types/data";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import { useState } from "react";
@@ -36,16 +36,22 @@ export default function TreeList({ trees, setTreeIdx }: TreeListProps) {
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
       >
-        {trees.map((value, idx) => (
-          <MenuItem
-            key={idx}
-            onClick={() => {
-              setTreeIdx(idx);
-            }}
-          >
-            {value.name}
-          </MenuItem>
-        ))}
+        {trees.length > 0 ? (
+          trees.map((value, idx) => (
+            <MenuItem
+              key={idx}
+              onClick={() => {
+                setTreeIdx(idx);
+              }}
+            >
+              {value.name}
+            </MenuItem>
+          ))
+        ) : (
+          <Typography sx={{ padding: "0 0.5rem" }}>
+            No query trees yet. Highlight some text in the pdf to add one!
+          </Typography>
+        )}
       </Menu>
     </>
   );
