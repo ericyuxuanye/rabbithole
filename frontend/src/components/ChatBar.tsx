@@ -4,15 +4,28 @@ import SendIcon from "@mui/icons-material/Send";
 
 interface ChatBarProps {
   disabled?: boolean;
-  onSend: (message: string) => void;
+  onSend: () => void;
+  prompts: string[];
+  setPrompts: (prompts: string[]) => void;
+  apiCallWrapper: (newMessage: string) => Promise<void>;
 }
 
-const ChatBar: React.FC<ChatBarProps> = ({ disabled = false, onSend }) => {
+const ChatBar: React.FC<ChatBarProps> = ({
+  disabled = false,
+  onSend,
+  prompts,
+  setPrompts,
+  apiCallWrapper,
+}) => {
   const [message, setMessage] = useState("");
 
   const handleSend = () => {
     if (message.trim()) {
-      onSend(message);
+      console.log(message);
+      const newPrompts = [...prompts, message];
+      setPrompts(newPrompts);
+      onSend();
+      apiCallWrapper(message);
       setMessage(""); // Clear the input after sending
     }
   };
@@ -33,10 +46,15 @@ const ChatBar: React.FC<ChatBarProps> = ({ disabled = false, onSend }) => {
         variant="outlined"
         placeholder="Ask a question..."
         value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        onChange={(e) => setMessage(e.target.value.replace(/^\n+/, ""))}
         disabled={disabled}
         multiline // Enable multiline
         maxRows={4} // Limit to a maximum of 4 rows
+        onKeyDown={(event) => {
+          if (event.key === "Enter" && !event.shiftKey) {
+            handleSend();
+          }
+        }}
         sx={{
           flexGrow: 1,
           marginRight: "0.5rem",
@@ -56,9 +74,9 @@ const ChatBar: React.FC<ChatBarProps> = ({ disabled = false, onSend }) => {
         onClick={handleSend}
         disabled={disabled}
         sx={{
-          backgroundColor: disabled ? '#e3f2fd' : '#1976d2',
-          '&:hover': {
-          backgroundColor: disabled ? '#e3f2fd' : '#115293',
+          backgroundColor: disabled ? "#e3f2fd" : "#1976d2",
+          "&:hover": {
+            backgroundColor: disabled ? "#e3f2fd" : "#115293",
           },
           borderRadius: "50%", // Make the button round
           // padding: "0.5rem", // Add some padding

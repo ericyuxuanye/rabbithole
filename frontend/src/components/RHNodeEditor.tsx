@@ -39,31 +39,43 @@ export default function RHNodeEditor({
   const [name, setName] = useState(rhNodeData.name);
   const [prompt, setPrompt] = useState(rhNodeData.prompt || "");
   const [response, setResponse] = useState(rhNodeData.response || "");
+  const [prompts, setPrompts] = useState(rhNodeData.prompts);
+  const [responses, setResponses] = useState(rhNodeData.responses);
   const [loading, setLoading] = useState(false);
+  const [chatDisabled, setChatDisabled] = useState(false);
 
   // const [isEditingName, setIsEditingName] = useState(true);
   const [isEditingPrompt, setIsEditingPrompt] = useState(true);
 
   const handleClose = () => {
     rhNodeData.name = name;
-    rhNodeData.prompt = prompt;
-    rhNodeData.response = response;
+    // rhNodeData.prompt = prompt;
+    // rhNodeData.response = response;
     const newRootData = { ...rootData };
     setRootData(newRootData);
     onClose();
   };
 
-  const handleApiCall = async () => {
+  const handleApiCall = async (prompts: string[], responses: string[]) => {
     setLoading(true);
+    console.log(prompts, responses);
+    
     // const response = await fetch("http://localhost:8000/inference?query=" + encodeURIComponent(prompt));
     // if (!response.ok) {
     //   throw new Error("Bad response " + response);
     // }
     // const json = await response.json();
+
+    const newResponses = [...responses, `new response ${responses.length + 1}`];
+    setResponses(newResponses);
+    setChatDisabled(false);
     setLoading(false);
     // setResponse(json.result);
-    setResponse("le poo poo");
   };
+
+  const apiCallWrapper = async (newMessage: string) => {
+    handleApiCall([...prompts, newMessage], responses);
+  }
 
   return (
     <>
@@ -72,7 +84,7 @@ export default function RHNodeEditor({
         onClose={handleClose}
         sx={{
           "& .MuiDialog-paper": {
-            minWidth: "35vw",
+            minWidth: "50vw",
           },
         }}
       >
@@ -178,15 +190,26 @@ export default function RHNodeEditor({
           </div> */}
 
           <ChatLog
-            prompts={rhNodeData.prompts}
+            prompts={prompts}
             responses={
-              rhNodeData.prompts.length > 0
-                ? rhNodeData.responses
+              prompts.length > 0
+                ? responses
                 : ["Ask a question to get started!"]
             }
           />
 
-          <ChatBar onSend={() => {}} disabled={false} />
+          <ChatBar
+            onSend={() => {
+              setChatDisabled(true);
+              // const newPrompts = [...prompts];
+              // setPrompts(newPrompts);
+              // mess with this later
+            }}
+            disabled={chatDisabled}
+            prompts={prompts}
+            setPrompts={setPrompts}
+            apiCallWrapper={apiCallWrapper}
+          />
 
           {/* {loading ? (
             <CircularProgress />
