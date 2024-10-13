@@ -6,14 +6,20 @@ import { useEffect, useRef, useState } from "react";
 type RHTreeProps = {
   data: RHNodeData;
   setData: (newData: RHNodeData) => void;
+  focusedUuid: string;
+  setFocusedUuid: (focusedUuid: string) => void;
 };
 
-export default function RHTree({ data, setData }: RHTreeProps) {
+export default function RHTree({
+  data,
+  setData,
+  focusedUuid,
+  setFocusedUuid,
+}: RHTreeProps) {
   const treeRef = useRef<HTMLDivElement>(null!);
   const nodeSize = { x: 200, y: 200 };
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
   // display the editor for the root initially
-  const [focusedUuid, setFocusedUuid] = useState(data.uuid);
 
   useEffect(() => {
     // Calculate the dimensions of the container after rendering

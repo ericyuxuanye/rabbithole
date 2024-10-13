@@ -10,6 +10,8 @@ import { RHNodeData } from "./types/data";
 function App() {
   const [trees, setTrees] = useState<RHNodeData[]>([]);
   const [treeIdx, setTreeIdx] = useState(-1);
+  // display the editor for the root initially
+  const [focusedUuid, setFocusedUuid] = useState("");
 
   return (
     <>
@@ -28,6 +30,7 @@ function App() {
           trees={trees}
           setTrees={setTrees}
           setTreeIdx={setTreeIdx}
+          setFocusedUuid={setFocusedUuid}
         />
       </div>
       {/* doesn't work in full screen */}
@@ -70,6 +73,8 @@ function App() {
               newTrees[treeIdx] = value;
               setTrees(newTrees);
             }}
+            focusedUuid={focusedUuid}
+            setFocusedUuid={setFocusedUuid}
           />
         </div>
       )}
