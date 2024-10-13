@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, TextField, IconButton } from "@mui/material";
+import { Box, TextField, IconButton, CircularProgress } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 
 interface ChatBarProps {
@@ -69,25 +69,29 @@ const ChatBar: React.FC<ChatBarProps> = ({
           },
         }}
       />
-      <IconButton
-        onClick={handleSend}
-        disabled={disabled}
-        sx={{
-          backgroundColor: disabled ? "#e3f2fd" : "#1976d2",
-          "&:hover": {
-            backgroundColor: disabled ? "#e3f2fd" : "#115293",
-          },
-          borderRadius: "50%", // Make the button round
-          // padding: "0.5rem", // Add some padding
-        }}
-      >
-        <SendIcon
+      {disabled ? (
+        <CircularProgress />
+      ) : (
+        <IconButton
+          onClick={handleSend}
+          disabled={disabled}
           sx={{
-            color: "#fff",
-            transform: "rotate(-90deg)",
+            backgroundColor: "#1976d2",
+            "&:hover": {
+              backgroundColor: "#115293",
+            },
+            borderRadius: "50%", // Make the button round
+            // padding: "0.5rem", // Add some padding
           }}
-        />{" "}
-      </IconButton>
+        >
+          <SendIcon
+            sx={{
+              color: "#fff",
+              transform: "rotate(-90deg)",
+            }}
+          />{" "}
+        </IconButton>
+      )}
     </Box>
   );
 };

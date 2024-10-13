@@ -1,5 +1,5 @@
 import { Box, Paper, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 interface ChatLogProps {
   prompts: string[];
@@ -9,6 +9,13 @@ interface ChatLogProps {
 export const ChatLog: React.FC<ChatLogProps> = ({ prompts, responses }) => {
   // Determine the length of the longer array to handle mismatched lengths
   const maxLength = Math.max(prompts.length, responses.length);
+  
+  const boxRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (boxRef.current) {
+      boxRef.current.scrollTop = boxRef.current.scrollHeight;
+    }
+  }, [prompts, responses]);
 
   return (
     <Box
@@ -22,6 +29,7 @@ export const ChatLog: React.FC<ChatLogProps> = ({ prompts, responses }) => {
         borderRadius: "8px",
         backgroundColor: "#f9f9f9", // Light background for chat log
       }}
+      ref={boxRef}
     >
       {Array.from({ length: maxLength }).map((_, index) => (
         <React.Fragment key={index}>

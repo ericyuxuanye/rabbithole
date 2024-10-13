@@ -310,14 +310,6 @@ export default function RHNodeEditor({
             </Box>
           )}
         </DialogContent>
-        {/* <DialogActions>
-          <Button onClick={handleApiCall} color="primary">
-            Generate Response
-          </Button>
-          <Button onClick={handleClose} color="secondary">
-            Close
-          </Button>
-        </DialogActions> */}
       </Dialog>
     </>
   );

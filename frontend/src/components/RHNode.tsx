@@ -68,7 +68,7 @@ export default function RHNode({
             }}
           >
             <Typography variant="h6" sx={{ marginBottom: '0.5rem', fontWeight: "600" }}>
-              {truncateString(nodeDatum.name, 20)}
+              {truncateString(nodeDatum.name, 15)}
             </Typography>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75em', marginBottom: "0.5rem" }}>
               <Tooltip title={"View query details"}>
