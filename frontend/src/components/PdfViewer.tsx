@@ -78,7 +78,7 @@ export default function PdfViewer({
     renderHighlightTarget,
   });
   return (
-    <div style={{ height: "100%" }}>
+    <div style={{ height: "100%", width: "100%", overflow: "hidden" }}>
       <Worker
         workerUrl={`https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`}
       >

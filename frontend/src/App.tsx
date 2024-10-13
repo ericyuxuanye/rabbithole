@@ -4,6 +4,7 @@ import RHTree from "./components/RHTree";
 import { v4 as uuidv4 } from "uuid";
 import PdfViewer from "./components/PdfViewer";
 import { RHNodeData } from "./types/data";
+import Navbar from "./components/Navbar";
 
 const treeData = {
   name: "root",
@@ -19,16 +20,16 @@ function App() {
 
   return (
     <>
-      {/* <RHTree data={data} setData={setData} /> */}
       <div
         style={{
-          // position: "absolute",
-          // left: 0,
-          // top: 0,
+          display: "flex",
+          flexDirection: "column",
           width: "100vw",
           height: "100vh",
+          overflow: "hidden",
         }}
       >
+        <Navbar />
         <PdfViewer
           pdfUrl="./test.pdf"
           trees={trees}
@@ -38,14 +39,18 @@ function App() {
       </div>
       {/* doesn't work in full screen */}
       {treeIdx != -1 && (
-        <div style={{
-          position: "absolute",
-          bottom: 0,
-          width: "100vw",
-          height: "50vh",
-          borderTop: "1px solid black",
-          background: "#ffffff"
-        }}>
+        <div
+          style={{
+            position: "fixed",
+            bottom: 0,
+            width: "100vw",
+            height: "45vh",
+            borderTop: "1px solid black",
+            background: "#ffffff",
+            zIndex: "10",
+            overflow: "hidden",
+          }}
+        >
           <RHTree
             data={trees[treeIdx]}
             setData={(value: RHNodeData) => {
