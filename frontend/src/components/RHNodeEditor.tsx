@@ -60,13 +60,20 @@ export default function RHNodeEditor({
   const handleApiCall = async (prompts: string[], responses: string[]) => {
     setLoading(true);
     
-    // const response = await fetch("http://localhost:8000/inference?query=" + encodeURIComponent(prompt));
-    // if (!response.ok) {
-    //   throw new Error("Bad response " + response);
-    // }
-    // const json = await response.json();
+    const response = await fetch("http://localhost:8000/inference", {
+      method: 'POST', // Specify the request method
+      headers: {
+        'Content-Type': 'application/json' // Set the content type to JSON
+      },
+      body: JSON.stringify({user: prompts, assistant: responses}) // Convert the data to a JSON string
+    });
+    if (!response.ok) {
+      throw new Error("Bad response " + response);
+    }
+    const json = await response.json();
+    console.log(json);
 
-    const newResponses = [...responses, `new response ${responses.length + 1}`];
+    const newResponses = [...responses, json.result];
     setResponses(newResponses);
     setChatDisabled(false);
     setLoading(false);

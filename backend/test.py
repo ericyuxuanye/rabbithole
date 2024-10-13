@@ -1,12 +1,36 @@
-from transformers import AutoTokenizer
-from optimum.intel.openvino import OVModelForCausalLM
+#!/usr/bin/env python3
+# Copyright (C) 2024 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
 
-model_id = "OpenVINO/mistral-7b-instruct-v0.1-int4-ov"
-tokenizer = AutoTokenizer.from_pretrained(model_id)
-model = OVModelForCausalLM.from_pretrained(model_id)
+import argparse
+import openvino_genai
 
-inputs = tokenizer("What is OpenVINO?", return_tensors="pt")
 
-outputs = model.generate(**inputs, max_length=200)
-text = tokenizer.batch_decode(outputs)[0]
-print(text)
+def streamer(subword):
+    print(subword, end='', flush=True)
+    # Return flag corresponds whether generation should be stopped.
+    # False means continue generation.
+    return False
+
+
+def main():
+
+    device = 'CPU'  # GPU can be used as well
+    pipe = openvino_genai.LLMPipeline("./finetuned_model", device)
+
+    config = openvino_genai.GenerationConfig()
+    config.max_new_tokens = 100
+
+    pipe.start_chat()
+    while True:
+        try:
+            prompt = input('question:\n')
+        except EOFError:
+            break
+        pipe.generate(prompt, config, streamer)
+        print('\n----------')
+    pipe.finish_chat()
+
+
+if '__main__' == __name__:
+    main()
