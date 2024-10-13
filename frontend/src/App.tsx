@@ -31,7 +31,7 @@ function App() {
           overflow: "hidden",
         }}
       >
-        <Navbar />
+        <Navbar trees={trees} setTreeIdx={setTreeIdx} />
         <PdfViewer
           pdfUrl="./test.pdf"
           trees={trees}

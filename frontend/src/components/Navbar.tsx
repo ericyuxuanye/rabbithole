@@ -6,25 +6,19 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Box } from "@mui/material";
+import TreeList from "./TreeList";
+import { RHNodeData } from "../types/data";
 
-const Navbar: React.FC = () => {
-  const handleMenuClick = () => {
-    // Implement menu toggle logic here
-    console.log("Menu clicked");
-  };
+type NavbarProps = {
+  trees: RHNodeData[];
+  setTreeIdx: (treeIdx: number) => void;
+};
 
+const Navbar = ({ trees, setTreeIdx }: NavbarProps) => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <IconButton
-          edge="start"
-          color="inherit"
-          aria-label="menu"
-          onClick={handleMenuClick}
-          sx={{ mr: 2 }}
-        >
-          <MenuIcon />
-        </IconButton>
+        <TreeList trees={trees} setTreeIdx={setTreeIdx} />
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           My Logo
         </Typography>
