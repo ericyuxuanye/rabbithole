@@ -16,7 +16,7 @@ import { RHNodeData } from "../types/data";
 
 type RHNodeEditorProps = {
   rootData: RHNodeData;
-  setRootData: React.Dispatch<React.SetStateAction<RHNodeData>>;
+  setRootData: (newData: RHNodeData) => void;
   isOpen: boolean;
   rhNodeData: RHNodeData;
   onClose: () => void;

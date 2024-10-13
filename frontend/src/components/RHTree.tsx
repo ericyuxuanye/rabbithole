@@ -4,7 +4,7 @@ import RHNode from "./RHNode";
 
 type RHTreeProps = {
   data: RHNodeData;
-  setData: React.Dispatch<React.SetStateAction<RHNodeData>>;
+  setData: (newData: RHNodeData) => void;
 };
 
 export default function RHTree({ data, setData }: RHTreeProps) {

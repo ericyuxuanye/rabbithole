@@ -11,7 +11,7 @@ type RHNodeProps = {
   nodeWidth: number;
   nodeHeight: number;
   rootData: RHNodeData;
-  setRootData: React.Dispatch<React.SetStateAction<RHNodeData>>;
+  setRootData: (newData: RHNodeData) => void;
 };
 
 export default function RHNode({
@@ -57,7 +57,11 @@ export default function RHNode({
               color: "#1a1a1a",
             }}
           >
-            <h3 style={{ textAlign: "center" }}>{nodeDatum.name}</h3>
+            <h3 style={{ textAlign: "center" }}>
+              {nodeDatum.name.length < 20
+                ? nodeDatum.name
+                : `${nodeDatum.name.slice(0, 17)}...`}
+            </h3>
             {/* probably move prompt and repsonse to a widget later */}
             {/* <p style={{ textAlign: "center" }}>Prompt: {nodeDatum.prompt}</p> */}
             {/* <p style={{ textAlign: "center" }}>Response: {nodeDatum.response}</p> */}
