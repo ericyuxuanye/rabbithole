@@ -20,13 +20,11 @@ const Navbar = ({ trees, setTreeIdx }: NavbarProps) => {
       <Toolbar>
         <TreeList trees={trees} setTreeIdx={setTreeIdx} />
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          My Logo
+          Rabbit Hole
         </Typography>
         <Box sx={{ display: { xs: "none", md: "flex" } }}>
-          <Button color="inherit">Home</Button>
-          <Button color="inherit">About</Button>
-          <Button color="inherit">Services</Button>
-          <Button color="inherit">Contact</Button>
+          <Button color="inherit">Log In</Button>
+          <Button color="inherit">Sign Up</Button>
         </Box>
       </Toolbar>
     </AppBar>
