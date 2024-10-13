@@ -3,6 +3,7 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import "@react-pdf-viewer/highlight/lib/styles/index.css";
+import SearchIcon from '@mui/icons-material/Search';
 
 import { Button, Position, Tooltip } from "@react-pdf-viewer/core";
 import {
@@ -59,7 +60,7 @@ export default function PdfViewer({
               setTreeIdx(treeIdx);
             }}
           >
-            <MessageIcon />
+            <SearchIcon />
           </Button>
         }
         content={() => <div style={{ width: "100px" }}>Ask about this!</div>}

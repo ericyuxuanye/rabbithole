@@ -10,8 +10,8 @@ import {
   IconButton,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import SaveIcon from "@mui/icons-material/Save";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
+import CheckIcon from '@mui/icons-material/Check';
 import { RHNodeData } from "../types/data";
 
 type RHNodeEditorProps = {
@@ -33,8 +33,8 @@ export default function RHNodeEditor({
   const [prompt, setPrompt] = useState(rhNodeData.prompt || "");
   const [response, setResponse] = useState(rhNodeData.response || "");
 
-  const [isEditingName, setIsEditingName] = useState(false);
-  const [isEditingPrompt, setIsEditingPrompt] = useState(false);
+  const [isEditingName, setIsEditingName] = useState(true);
+  const [isEditingPrompt, setIsEditingPrompt] = useState(true);
 
   const handleClose = () => {
     rhNodeData.name = name;
@@ -85,7 +85,7 @@ export default function RHNodeEditor({
                   margin="normal"
                 />
                 <IconButton onClick={() => setIsEditingName(false)}>
-                  <SaveIcon />
+                  <CheckIcon />
                 </IconButton>
               </>
             ) : (
@@ -113,7 +113,7 @@ export default function RHNodeEditor({
                   margin="normal"
                 />
                 <IconButton onClick={() => setIsEditingPrompt(false)}>
-                  <SaveIcon />
+                  <CheckIcon />
                 </IconButton>
               </>
             ) : (
