@@ -64,7 +64,7 @@ export default function PdfViewer({
               setTreeIdx(treeIdx);
             }}
           >
-            <SearchIcon />
+            <div style={{marginTop: "0.25rem"}}><SearchIcon /></div>
           </Button>
         }
         content={() => <div style={{ width: "100px" }}>Ask about this!</div>}
