@@ -47,7 +47,6 @@ export default function PdfViewer({
         target={
           <Button
             onClick={() => {
-              // figure out how to get selected text
               const newTrees = [...trees];
               const selectedString = window.getSelection()?.toString();
               const treeIdx =
@@ -66,7 +65,7 @@ export default function PdfViewer({
                 }) - 1;
               setTrees(newTrees);
               setTreeIdx(treeIdx);
-              setFocusedUuid(newTrees[newTrees.length - 1].uuid);
+              setFocusedUuid(newTrees[treeIdx].uuid);
             }}
           >
             <div style={{ marginTop: "0.25rem" }}>

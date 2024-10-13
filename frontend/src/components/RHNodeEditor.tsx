@@ -1,23 +1,18 @@
-import { useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
 import {
-  Button,
+  Box,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogTitle,
-  TextField,
-  Typography,
   IconButton,
-  Box,
-  CircularProgress,
+  TextField,
+  Typography
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import CloseIcon from "@mui/icons-material/Close";
-import CheckIcon from "@mui/icons-material/Check";
+import { useEffect, useState } from "react";
 import { RHNodeData } from "../types/data";
 import { truncateString } from "../util";
-import { ChatLog } from "./ChatLog";
 import ChatBar from "./ChatBar";
+import { ChatLog } from "./ChatLog";
 
 type RHNodeEditorProps = {
   rootData: RHNodeData;
@@ -37,20 +32,26 @@ export default function RHNodeEditor({
   setFocusedUuid,
 }: RHNodeEditorProps) {
   const [name, setName] = useState(rhNodeData.name);
-  const [prompt, setPrompt] = useState(rhNodeData.prompt || "");
-  const [response, setResponse] = useState(rhNodeData.response || "");
   const [prompts, setPrompts] = useState(rhNodeData.prompts);
   const [responses, setResponses] = useState(rhNodeData.responses);
   const [loading, setLoading] = useState(false);
   const [chatDisabled, setChatDisabled] = useState(false);
 
-  // const [isEditingName, setIsEditingName] = useState(true);
-  const [isEditingPrompt, setIsEditingPrompt] = useState(true);
+  useEffect(() => {
+    setName(rhNodeData.name);
+    setPrompts(rhNodeData.prompts);
+    setResponses(rhNodeData.responses);
+    setLoading(false);
+    setChatDisabled(false);
+  }, [rhNodeData])
+
+  // console.log(rootData);
+  // console.log(rhNodeData);
 
   const handleClose = () => {
     rhNodeData.name = name;
-    // rhNodeData.prompt = prompt;
-    // rhNodeData.response = response;
+    rhNodeData.prompts = prompts;
+    rhNodeData.responses = responses;
     const newRootData = { ...rootData };
     setRootData(newRootData);
     onClose();
@@ -58,7 +59,6 @@ export default function RHNodeEditor({
 
   const handleApiCall = async (prompts: string[], responses: string[]) => {
     setLoading(true);
-    console.log(prompts, responses);
     
     // const response = await fetch("http://localhost:8000/inference?query=" + encodeURIComponent(prompt));
     // if (!response.ok) {

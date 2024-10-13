@@ -21,7 +21,6 @@ const ChatBar: React.FC<ChatBarProps> = ({
 
   const handleSend = () => {
     if (message.trim()) {
-      console.log(message);
       const newPrompts = [...prompts, message];
       setPrompts(newPrompts);
       onSend();
