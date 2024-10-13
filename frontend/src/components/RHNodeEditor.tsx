@@ -8,6 +8,7 @@ import {
   TextField,
   Typography,
   IconButton,
+  CircularProgress,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
@@ -32,6 +33,7 @@ export default function RHNodeEditor({
   const [name, setName] = useState(rhNodeData.name);
   const [prompt, setPrompt] = useState(rhNodeData.prompt || "");
   const [response, setResponse] = useState(rhNodeData.response || "");
+  const [loading, setLoading] = useState(false);
 
   // const [isEditingName, setIsEditingName] = useState(true);
   const [isEditingPrompt, setIsEditingPrompt] = useState(true);
@@ -44,7 +46,17 @@ export default function RHNodeEditor({
     setRootData(newRootData);
     onClose();
   };
-  const handleApiCall = () => {};
+
+  const handleApiCall = async () => {
+    setLoading(true);
+    const response = await fetch("http://localhost:8000/inference?query=" + encodeURIComponent(prompt));
+    if (!response.ok) {
+      throw new Error("Bad response " + response);
+    }
+    const json = await response.json();
+    setLoading(false);
+    setResponse(json.result);
+  };
 
   return (
     <>
@@ -116,9 +128,9 @@ export default function RHNodeEditor({
               </>
             )}
           </div>
-          <Typography variant="body1" marginTop={2}>
+          {loading ? <CircularProgress /> : <Typography variant="body1" marginTop={2}>
             Response: {response}
-          </Typography>
+          </Typography>}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleApiCall} color="primary">
